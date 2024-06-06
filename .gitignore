@@ -1,2 +1,5 @@
 test.py
 idols.db
+__pycache__/main.cpython-312.pyc
+__pycache__/models.cpython-312.pyc
+__pycache__/schema.cpython-312.pyc
