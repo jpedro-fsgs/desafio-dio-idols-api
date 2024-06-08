@@ -10,15 +10,17 @@ async function getData(){
         const response = await fetch(`${URL}/groups`);
         
         if (!response.ok) {
+            
             throw new Error(`HTTP error! status: ${response.status}`);
+            
         }
-        
         const data = await response.json();
         return data;
     }
     catch(error){
         alert("Can't connect to database");
         console.error(error);
+        return null;
     }
 }
 
@@ -71,9 +73,13 @@ async function deleteGroup(id){
 
 async function getGroups(){
     resultado = await getData();
+    if(!resultado){
+        return;
+    }
     buttonContainer.innerHTML = "";
-    resultado.forEach(createGroupButtons);
-    
+    if(resultado){
+        resultado.forEach(createGroupButtons);
+    }
     const button = document.createElement("button");
     button.innerHTML = '＋';
     button.classList.add("group-btn");

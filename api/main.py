@@ -28,8 +28,7 @@ async def root():
 @app.get('/groups')
 async def get_groups(session: Session = Depends(get_session)):
     groups = session.query(Group).options(joinedload(Group.idols)).all()
-    if groups: return groups
-    raise HTTPException(status_code=404, detail='No Groups found')
+    return groups
 
 @app.get('/idols')
 async def get_idols(session: Session = Depends(get_session)):
