@@ -8,7 +8,7 @@ def get_session():
     finally:
         session.close()
 
-engine = create_engine('sqlite:///./idols.db')
+engine = create_engine('sqlite:///./api/idols.db')
 
 Base = declarative_base()
 

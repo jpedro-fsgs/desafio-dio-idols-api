@@ -1,13 +1,25 @@
+import socket
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import func
 from sqlalchemy.orm import joinedload
-from schema import Idol, Group, get_session, Session
-from models import IdolInput, GroupInput, IdolUpdate, GroupUpdate, IdolDelete, GroupDelete
+from api.schema import Idol, Group, get_session, Session
+from api.models import IdolInput, GroupInput, IdolUpdate, GroupUpdate, IdolDelete, GroupDelete
 
 app=FastAPI(title='IdolsAPI')
 
+app.add_middleware(
+    CORSMiddleware,
+    # allow_origins=["*"],
+    allow_origins=["http://127.0.0.1:2130", "http://localhost:2130"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 def get_group_id(name, session: Session = Depends(get_session)):
-    group = session.query(Group).filter(Group.name == name).first()
-    return group
+    group = session.query(Group).filter(func.lower(func.replace(Group.name, ' ', '')) == func.lower(name.replace(' ', ''))).first()
+    if group: return group.id
 
 @app.get('/')
 async def root():
@@ -28,17 +40,17 @@ async def get_idols(session: Session = Depends(get_session)):
 @app.get('/group/{group_id_or_name}')
 async def get_group(group_id_or_name: str, session: Session = Depends(get_session)):
     if group_id_or_name.isdigit():
-        group_id = int(group_id_or_name)
-        group = session.query(Group).options(joinedload(Group.idols)).filter(Group.id == group_id).first()
+        group_id_or_name = int(group_id_or_name)
     else:
-        group = session.query(Group).options(joinedload(Group.idols)).filter(Group.name == group_id_or_name).first()
+        group_id_or_name = get_group_id(group_id_or_name, session=session)
+    group = session.query(Group).options(joinedload(Group.idols)).filter(Group.id == group_id_or_name).first()
     if group: return group
     raise HTTPException(status_code=404, detail='Group not found')
 
 @app.post("/idol")
 async def register_idol(idol_input: IdolInput, session: Session = Depends(get_session)):
     if idol_input.group.isdigit():
-        id_group = idol_input.group
+        id_group = int(idol_input.group)
     else:
         id_group = get_group_id(idol_input.group, session=session)
     try:
@@ -52,13 +64,18 @@ async def register_idol(idol_input: IdolInput, session: Session = Depends(get_se
 
 @app.post("/group")
 async def register_group(group_input: GroupInput, session: Session = Depends(get_session)):
-    group = Group(name=group_input.name, company=group_input.company)
-    session.add(group)
-    for idol in group_input.idols:
-        print(idol.stage_name)
+    try:
+        group = Group(name=group_input.name, company=group_input.company)
+        session.add(group)
+        session.commit()
+    except:
+        raise HTTPException(status_code=409, detail='Group already added')
+    for idol_input in group_input.idols:
+        idol = Idol(stage_name=idol_input.stage_name, real_name=idol_input.real_name, group_id=group.id)
+        session.add(idol)
     session.commit()
     return {"id": group.id,
-                "name": group.name}
+            "name": group.name}
 
 @app.put('/idol/')
 async def update_idol(idol_update: IdolUpdate, session: Session = Depends(get_session)):
@@ -92,9 +109,9 @@ async def update_idol(group_update: GroupUpdate, session: Session = Depends(get_
     
     raise HTTPException(status_code=404, detail='Group not found')
 
-@app.delete('/idol/{id}')
-async def delete_idol(id: int, session: Session = Depends(get_session)):
-    idol_query = session.query(Idol).filter(Idol.id == id)
+@app.delete('/idol/')
+async def delete_idol(idol_delete: IdolDelete, session: Session = Depends(get_session)):
+    idol_query = session.query(Idol).filter(Idol.id == idol_delete.id)
     idol=idol_query.first()
     if idol:
         session.delete(idol)
@@ -103,10 +120,11 @@ async def delete_idol(id: int, session: Session = Depends(get_session)):
     
     raise HTTPException(status_code=404, detail='Idol not found')
 
-@app.delete('/group/{group_id}')
-async def delete_group(id: int, session: Session = Depends(get_session)):
-    try:
-        group = session.query(Group).filter(Group.id == id).first()
+@app.delete('/group/')
+async def delete_group(group_delete: GroupDelete, session: Session = Depends(get_session)):
+   
+   group = session.query(Group).filter(Group.id == group_delete.id).first()
+   if group:
         for idol in group.idols:
             session.delete(idol)
         session.delete(group)
@@ -115,5 +133,4 @@ async def delete_group(id: int, session: Session = Depends(get_session)):
             "group_deleted": group.name,
             "members_deleted": [idol.stage_name for idol in group.idols]
         }
-    except:
-        raise HTTPException(status_code=404, detail='Group not found')
+   raise HTTPException(status_code=404, detail='Group not found')

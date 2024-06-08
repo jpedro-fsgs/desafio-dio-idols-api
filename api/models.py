@@ -7,7 +7,7 @@ class IdolInput(BaseModel):
     group: str
 
 class GroupIdolInput(BaseModel):
-    name: str
+    stage_name: str
     real_name: str
 
 class GroupInput(BaseModel):

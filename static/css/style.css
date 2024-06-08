@@ -1,0 +1,187 @@
+:root{
+    --color-font: #F8F9D7;
+    --color-head: #E49BFF;
+    --color-container: #C738BD;
+    --color-background: #850F8D;
+
+    /* --color-font: #FF55BB;
+    --color-head: #FFD3A3;
+    --color-container: #FCFFB2;
+    --color-background: #B6EAFA; */
+
+    /* --color-font: #FFEBB2;
+    --color-head: #E59BE9;
+    --color-container: #D862BC;
+    --color-background: #8644A2; */
+}
+body{
+    margin: 0;
+    background-color: var(--color-background);
+}
+main{
+    font-family: "Nunito", sans-serif;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.container{
+    background-color: var(--color-container);
+    display: grid;
+    gap: 1rem;
+    grid-template: 0.5fr 1fr 1fr / 1fr 1fr 1fr;
+    width: 70vw;
+    padding: 5%;
+    min-height: 75vh;
+    height: fit-content;
+}
+
+.button-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    flex-wrap: wrap;
+    background-color: var(--color-head);
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+    /* width: 90%; */
+}
+.group-btn{
+    color: var(--color-font);
+    font-family: "Nunito", sans-serif;
+    font-size: 1rem;
+    font-weight: bolder;
+    background-color: var(--color-container);
+    padding: 7px;
+    border-color: var(--color-font);
+    border-radius: 10px;
+    margin: 0 1%;
+}
+.group-btn:hover{
+    transform: scale(1.1);
+}
+.result-box{
+    background-color: var(--color-background);
+    border-radius: 0 0 0 10px;
+    grid-row-start: 2;
+    grid-row-end: 4;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2rem;
+
+}
+.idol-button{
+    color: var(--color-font);
+    width: 25rem;
+    font-family: "Nunito", sans-serif;
+    font-size: 1.2rem;
+    font-weight: bolder;
+    background-color: var(--color-container);
+    padding: 7px;
+    border-color: var(--color-font);
+    margin: 1% 0;
+
+}
+.delete-button{
+    
+    color: var(--color-font);
+    font-family: "Nunito", sans-serif;
+    font-size: 1.2rem;
+    font-weight: bolder;
+    background-color: red;
+    padding: 7px;
+    border-color: var(--color-font);
+    margin: 1% 0;
+}
+.profile{
+    background-color: var(--color-background);
+    border-radius: 0 0 10px 0;
+    grid-row-start: 2;
+    grid-row-end: 4;
+    grid-column-start: 2;
+    grid-column-end: 4;
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+
+
+}
+.profile>img{
+    padding: 1rem;
+    height: 50%;
+    align-self: flex-start;
+    object-fit: cover;
+    border-radius: 10%;
+}
+.profile>h2{
+    color: var(--color-font);
+    font-size: 3rem;
+    margin: 0;
+}
+.group-form{
+    font-family: "Nunito", sans-serif;
+    color: var(--color-font);
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.fieldset-group-input{
+    border-color: var(--color-font);
+
+}
+.fieldset-idols-input{
+    border-color: var(--color-font);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+.group-form>fieldset input{
+    background-color: var(--color-font);
+    color: var(--color-background);
+    border: 0;
+}
+.add-idol-btn{
+    color: var(--color-background);
+    font-family: "Nunito", sans-serif;
+    font-size: 1rem;
+    background-color: var(--color-head);
+    padding: 0.1 rem 0.4rem;
+    border-color: var(--color-font);
+    border-radius: 10px;
+    order: 1;
+    width: 25%;
+}
+.label-name-and-company{
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+.label-stagename-and-realname{
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+.submit-group-button{
+    color: var(--color-font);
+    font-family: "Nunito", sans-serif;
+    font-size: 1rem;
+    font-weight: bolder;
+    background-color: var(--color-container);
+    padding: 7px;
+    border-color: var(--color-font);
+    border-radius: 10px;
+    margin: 0 1%;
+    width: 25%;
+    align-self: flex-end;
+}
