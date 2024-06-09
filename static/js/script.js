@@ -26,11 +26,11 @@ async function getData(){
 
 async function submitGroup(group_data){
     const options = {
-        method: 'POST', // Método HTTP
+        method: 'POST',
         headers: {
-            'Content-Type': 'application/json' // Tipo de conteúdo
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify(group_data) // Corpo da requisição convertido para JSON
+        body: JSON.stringify(group_data)
     };
     try{
         const response = await fetch(`${URL}/group`, options);

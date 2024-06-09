@@ -1,6 +1,8 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, create_engine
 from sqlalchemy.orm import Session, declarative_base, relationship
 
+engine = create_engine('sqlite:///./api/idols.db')
+
 def get_session():
     session = Session(bind=engine)
     try:
@@ -8,7 +10,6 @@ def get_session():
     finally:
         session.close()
 
-engine = create_engine('sqlite:///./api/idols.db')
 
 Base = declarative_base()
 
