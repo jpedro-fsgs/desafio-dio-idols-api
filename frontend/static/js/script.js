@@ -1,4 +1,3 @@
-
 const resultBox = document.querySelector(".result-box");
 const buttonContainer = document.querySelector(".button-container");
 const profile = document.querySelector(".profile");
@@ -72,7 +71,7 @@ async function deleteGroup(id){
 }
 
 async function getGroups(){
-    resultado = await getData();
+    const resultado = await getData();
     if(!resultado){
         return;
     }
